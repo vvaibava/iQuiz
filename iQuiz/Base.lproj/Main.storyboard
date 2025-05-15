@@ -84,6 +84,7 @@
                     <connections>
                         <outlet property="tableView" destination="tHg-uK-I1D" id="qiI-bY-gml"/>
                         <segue destination="YNE-h5-nQM" kind="show" identifier="questionSegue" id="hKA-Da-1kg"/>
+                        <segue destination="OzE-Pq-n7k" kind="show" identifier="settingsSegue" id="bER-sb-Ff4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -306,11 +307,74 @@
             </objects>
             <point key="canvasLocation" x="2967" y="-2"/>
         </scene>
+        <!--Settings View Controller-->
+        <scene sceneID="csR-Lb-Uhb">
+            <objects>
+                <viewController storyboardIdentifier="SettingsViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="OzE-Pq-n7k" customClass="SettingsViewController" customModule="iQuiz" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="44t-7c-Dy5">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FnV-Ji-KeL">
+                                <rect key="frame" x="315" y="156" width="49" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="autoRefresh:" destination="OzE-Pq-n7k" eventType="valueChanged" id="N10-jg-KpY"/>
+                                </connections>
+                            </switch>
+                            <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="Uot-7r-wfM">
+                                <rect key="frame" x="219" y="288" width="94" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="refreshInterval:" destination="OzE-Pq-n7k" eventType="valueChanged" id="Ngt-Pm-U2J"/>
+                                </connections>
+                            </stepper>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Sa1-ey-Boy">
+                                <rect key="frame" x="76" y="288" width="97" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="closePressed:" destination="OzE-Pq-n7k" eventType="editingDidEnd" id="SY3-r9-r9S"/>
+                                    <action selector="fetchData:" destination="OzE-Pq-n7k" eventType="editingDidEnd" id="NBe-qr-bn4"/>
+                                </connections>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Specify Auto Refresh" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Og7-91-Rsh">
+                                <rect key="frame" x="76" y="142" width="160" height="58"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Interval" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dZX-IY-L7g">
+                                <rect key="frame" x="116" y="377" width="160" height="98"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="JhJ-78-iyo"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="fze-bT-PTH"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="auto" destination="FnV-Ji-KeL" id="SLn-Bh-u3p"/>
+                        <outlet property="interval" destination="Uot-7r-wfM" id="Sey-iK-0F9"/>
+                        <outlet property="refreshIntervalLabel" destination="dZX-IY-L7g" id="OaB-9g-rOO"/>
+                        <outlet property="urlText" destination="Sa1-ey-Boy" id="3HX-uc-Ea6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="soy-fC-blH" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="654.19847328244271" y="747.88732394366195"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="7eN-NY-Ha9"/>
         <segue reference="jO2-dr-AI9"/>
-        <segue reference="FRO-y1-FMB"/>
+        <segue reference="0IK-VM-tQ1"/>
     </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="systemBackgroundColor">
