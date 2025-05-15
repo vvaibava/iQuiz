@@ -22,7 +22,7 @@ class SettingsViewController: UIViewController {
         urlText.text = UserDefaults.standard.string(forKey: "urlString") ?? url
         let autoRefresh = UserDefaults.standard.bool(forKey: "autoRefresh")
         auto.isOn = autoRefresh
-        let intervalStep = UserDefaults.standard.integer(forKey: "interval")
+        let intervalStep = UserDefaults.standard.integer(forKey: "refreshInterval")
         interval.value = Double(intervalStep > 0 ? intervalStep : 5)
         updateInterval()
         interval.isEnabled = auto.isOn
@@ -35,7 +35,7 @@ class SettingsViewController: UIViewController {
     
     @IBAction func autoRefresh(_ sender: UISwitch) {
         interval.isEnabled = sender.isOn
-        UserDefaults.standard.set(sender.isOn, forKey: "autoRefreshEnabled")
+        UserDefaults.standard.set(sender.isOn, forKey: "autoRefresh")
     }
     
     @IBAction func refreshInterval(_ sender: UIStepper) {
@@ -85,7 +85,9 @@ class SettingsViewController: UIViewController {
                 QuizDataStore.shared.quizTopics = topics
                 DispatchQueue.main.async {
                     self.showAlert(title: "Success", message: "Quiz data downloaded")
-                    self.dismiss(animated: true)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0){
+                        self.dismiss(animated: true)
+                    }
                 }
             } catch {
                 DispatchQueue.main.async {

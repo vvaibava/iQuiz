@@ -27,7 +27,7 @@ class QuizListViewController: UIViewController {
     var quizTopics: [QuizTopic] {
         return QuizDataStore.shared.quizTopics
     }
-
+    let topicImageNames = ["Math", "Marvel", "Science"]
     var selectedQuestions: [(question: String, options: [String], correct: Int)] = []
 
     override func viewDidLoad() {
@@ -45,7 +45,7 @@ class QuizListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
-        setupRefreshTimer()
+        refreshTimer()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -63,15 +63,17 @@ class QuizListViewController: UIViewController {
         downloadData(from: urlString)
     }
     
-    func setupRefreshTimer() {
+    func refreshTimer() {
         timer?.invalidate()
         let autoRefresh = UserDefaults.standard.bool(forKey: "autoRefresh")
-        if autoRefresh && refreshInterval > 0 {
-            timer = Timer.scheduledTimer(timeInterval: refreshInterval,
-                                        target: self,
-                                        selector: #selector(refreshData),
-                                        userInfo: nil,
-                                        repeats: true)
+        if autoRefresh {
+            timer = Timer.scheduledTimer(
+                timeInterval: refreshInterval,
+                target: self,
+                selector: #selector(refreshData),
+                userInfo: nil,
+                repeats: true
+            )
         }
     }
     
@@ -147,7 +149,7 @@ class QuizListViewController: UIViewController {
     }
 
     @IBAction func unwindToMain(segue: UIStoryboardSegue) {
-        setupRefreshTimer()
+        refreshTimer()
     }
     
     @IBAction func settingsPressed(_ sender: UIBarButtonItem) {
@@ -165,26 +167,28 @@ extension QuizListViewController: UITableViewDataSource, UITableViewDelegate {
         return 140
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt idxPath: IndexPath) -> UITableViewCell {
 
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "QuizTopicCell", for: indexPath) as? QuizTopicCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "QuizTopicCell", for: idxPath) as? QuizTopicCell else {
             fatalError("QuizTopicCell not found.")
         }
 
-        let topic = quizTopics[indexPath.row]
+        let topic = quizTopics[idxPath.row]
         cell.topicTitleLabel.text = topic.title
         cell.topicDescriptionLabel.text = topic.desc
-        cell.topicImageView.image = UIImage(named: topic.title)
+        cell.topicImageView.image = UIImage(named: topicImageNames[idxPath.row])
 
         return cell
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let topic = quizTopics[indexPath.row]
-        selectedQuestions = topic.questions.compactMap { question in
-            guard let correctIndex = question.answers.firstIndex(of: question.answer) else { return nil }
-            return (question.text, question.answers, correctIndex)
+    func tableView(_ tableView: UITableView, didSelectRowAt idxPath: IndexPath) {
+        let topic = quizTopics[idxPath.row]
+        guard let questions = QuizDataStore.shared.getQuestions(for: topic.title) else {
+            showAlert(title: "Error", message: "Could not load questions for this topic")
+            return
         }
+        
+        selectedQuestions = questions
         performSegue(withIdentifier: "questionSegue", sender: self)
     }
 }

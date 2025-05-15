@@ -323,7 +323,7 @@
                                 </connections>
                             </switch>
                             <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="Uot-7r-wfM">
-                                <rect key="frame" x="219" y="288" width="94" height="32"/>
+                                <rect key="frame" x="233" y="410" width="94" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <connections>
                                     <action selector="refreshInterval:" destination="OzE-Pq-n7k" eventType="valueChanged" id="Ngt-Pm-U2J"/>
@@ -336,7 +336,6 @@
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <action selector="closePressed:" destination="OzE-Pq-n7k" eventType="editingDidEnd" id="SY3-r9-r9S"/>
-                                    <action selector="fetchData:" destination="OzE-Pq-n7k" eventType="editingDidEnd" id="NBe-qr-bn4"/>
                                 </connections>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Specify Auto Refresh" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Og7-91-Rsh">
@@ -347,12 +346,21 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Interval" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dZX-IY-L7g">
-                                <rect key="frame" x="116" y="377" width="160" height="98"/>
+                                <rect key="frame" x="44" y="377" width="160" height="98"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CAw-4B-Hff">
+                                <rect key="frame" x="215" y="288" width="112" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Check Now"/>
+                                <connections>
+                                    <action selector="fetchData:" destination="OzE-Pq-n7k" eventType="touchUpInside" id="R8c-px-p1c"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="JhJ-78-iyo"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
