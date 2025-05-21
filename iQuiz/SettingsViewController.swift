@@ -83,6 +83,7 @@ class SettingsViewController: UIViewController {
             do {
                 let topics = try JSONDecoder().decode([QuizTopic].self, from: data)
                 QuizDataStore.shared.quizTopics = topics
+                self.saveJSON(data)
                 DispatchQueue.main.async {
                     self.showAlert(title: "Success", message: "Quiz data downloaded")
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0){
@@ -109,5 +110,19 @@ class SettingsViewController: UIViewController {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(.init(title: "OK", style: .default))
         present(alert, animated: true)
+    }
+    
+    func saveJSON(_ data: Data) {
+        let url = getURL()
+        do {
+            try data.write(to: url)
+        } catch {
+            print("Error in saving quiz data")
+        }
+    }
+    
+    func getURL() -> URL{
+        let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        return dir.appendingPathComponent("quiz.json")
     }
 }

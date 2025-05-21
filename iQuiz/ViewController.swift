@@ -55,7 +55,43 @@ class QuizListViewController: UIViewController {
     
     func loadInitialData() {
         let urlString = UserDefaults.standard.string(forKey: "urlString") ?? "http://tednewardsandbox.site44.com/questions.json"
-        downloadData(from: urlString)
+        let monitor = NWPathMonitor()
+        monitor.pathUpdateHandler = { path in
+            if path.status == .satisfied {
+                self.downloadData(from: urlString)
+            } else {
+                self.loadJSON()
+            }
+            monitor.cancel()
+        }
+        monitor.start(queue: .global(qos: .background))
+    }
+    
+    func loadJSON() {
+        let url = getURL()
+        guard let data = try? Data(contentsOf: url) else {
+            DispatchQueue.main.async {
+                self.showAlert(title: "Offline Error", message: "No data available")
+            }
+            return
+        }
+        
+        do {
+            let topics = try JSONDecoder().decode([QuizTopic].self, from: data)
+            QuizDataStore.shared.quizTopics = topics
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        } catch {
+            DispatchQueue.main.async {
+                self.showAlert(title: "Error", message: "Couldn't load quiz data")
+            }
+        }
+    }
+    
+    func getURL() -> URL{
+        let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        return dir.appendingPathComponent("quiz.json")
     }
     
     @objc func refreshData() {
@@ -153,8 +189,11 @@ class QuizListViewController: UIViewController {
     }
     
     @IBAction func settingsPressed(_ sender: UIBarButtonItem) {
-        performSegue(withIdentifier: "settingsSegue", sender: self)
+        if let url = URL(string: UIApplication.openSettingsURLString) {
+            UIApplication.shared.open(url)
+        }
     }
+    
 }
 
 extension QuizListViewController: UITableViewDataSource, UITableViewDelegate {
@@ -183,12 +222,10 @@ extension QuizListViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt idxPath: IndexPath) {
         let topic = quizTopics[idxPath.row]
-        guard let questions = QuizDataStore.shared.getQuestions(for: topic.title) else {
-            showAlert(title: "Error", message: "Could not load questions for this topic")
-            return
+        selectedQuestions = topic.questions.map {
+            let correctIndex = $0.answers.firstIndex(of: $0.answer) ?? 0
+            return ($0.text, $0.answers, correctIndex)
         }
-        
-        selectedQuestions = questions
         performSegue(withIdentifier: "questionSegue", sender: self)
     }
 }
